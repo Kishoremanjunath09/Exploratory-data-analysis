@@ -1,0 +1,270 @@
+---
+title: "EDA LA1"
+author: "Kishore, Lakshminarasimhan"
+date: "2023-05-16"
+output:
+  word_document: default
+  html_document:
+    df_print: paged
+  pdf_document: default
+---
+
+In this part, we are loading and reading
+a CSV file named “train.csv” from the specified path and assigning it to the dataframe df. Finally,
+we are viewing the dataframe df by using the head() function.
+```{r}
+  df<-read.csv("train.csv")
+  head(df)
+```
+
+The last 6 rows are accessed using the tail() function
+```{r}
+  tail(df)
+```
+The structure of the df is shown below
+
+```{r}
+str(df)
+
+```
+the summary of the df is printed using the summary() function
+
+```{r}
+summary(df)
+
+```
+All the dimensional attributes of the df is checked below like total dimension, the number of rows, number of columns etc.
+
+```{r}
+dim(df)
+```
+```{r}
+nrow(df)
+```
+```{r}
+ncol(df)
+```
+The column names, class and type of data frame df is described below using its respective functions.
+
+```{r}
+names(df)
+```
+```{r}
+class(df)
+```
+```{r}
+typeof(df)
+```
+```{r}
+is.data.frame(df)
+```
+```{r}
+ls()
+```
+```{r}
+list(df)
+```
+```{r}
+#history()
+```
+ 
+```{r}
+save.image("eda_la1.RData") 
+```
+
+```{r}
+save(df,file="saved.RData")
+```
+
+```{r}
+samp<-load("saved.RData")
+samp
+```
+column wise accessing is done and operations performed onto the respective columns
+
+```{r}
+df$Loan_ID # Accessing a column of the data frame using $ notation
+
+```
+
+```{r}
+df[, "Education"] # Accessing a column of the data frame using bracket notation
+
+```
+
+```{r}
+df[1:10,] # Accessing the first 10 rows of the data frame
+
+```
+
+```{r}
+df[df$Dependents > 1,] # Accessing rows where a certain condition is met
+
+```
+
+```{r}
+df[df$LoanAmount %in% c(168, 112),] # Accessing rows where a certain value is present
+
+```
+
+```{r}
+df[order(df$Loan_Amount_Term),] # Sorting the data frame by a column
+
+```
+
+```{r}
+df[, c("Loan_Amount_Term", "LoanAmount")] # Selecting multiple columns from the data frame
+
+```
+
+```{r}
+df$column_name <- NULL # Deleting a column from the data frame
+
+```
+```{r}
+names(df)[1]
+```
+
+```{r}
+names(df)[3] <- "Marital_Status" # Renaming a column in the data frame
+names(df)[3]
+```
+
+```{r}
+df1 <- df[, c(2, 1)] # Reordering columns in the data frame
+df1
+```
+```{r}
+df
+```
+The coapplicantincome column is re-coded from numerical to categorical for easy understanding
+
+```{r}
+df$cat_CoapplicantIncome <- cut(df$CoapplicantIncome, breaks = c(-1, 5000, 10000, Inf), labels = c("low", "medium", "high")) # Re-coding a continuous variable to a categorical variable
+```
+```{r}
+df
+```
+The LoanAmount varible is log normalized as to reduce the amount and time of calculations that are performed onto that column
+
+```{r}
+df$new_LoanAmount <- log(df$LoanAmount) # Transforming a variable using a mathematical function
+df
+```
+The library dplyr is imported for further use
+
+```{r}
+library(dplyr)
+```
+dplyr package functions are used for grouping the data and sumarising the data 
+
+```{r}
+df2 <- group_by(df, Education) # Grouping the data frame by a column
+df2
+```
+```{r}
+summarise(df, mean_ApplicantIncome = mean(ApplicantIncome)) # Summarizing data by groups
+```
+
+The next step summarises the data by groups with standard errors and confidence intervals
+
+```{r}
+summarise(df,sd_ApplicantIncome = mean(ApplicantIncome), sd = sd(ApplicantIncome)) # Summarizing data by groups with standard errors and confidence intervals
+```
+
+
+The min max of the respective numerical column is found out
+```{r}
+#?min
+min(df[8])
+max(df[8])
+```
+
+```{r}
+min(df[7])
+max(df[7])
+```
+```{r}
+min(df[15])
+max(df[15])
+```
+```{r}
+
+```
+
+Now the dataframe is arranged according to the variable of interest such as LoanAmount, LoanAmountTerm, CoapplicantIncome and Dependents
+```{r}
+arrange(df, LoanAmount)
+```
+
+```{r}
+arrange(df, Loan_Amount_Term)
+```
+
+```{r}
+arrange(df, CoapplicantIncome)
+```
+
+```{r}
+arrange(df, Dependents)
+```
+```{r}
+df
+```
+The following code shows standard deviation of each column with itself.
+
+```{r}
+sd(df$CoapplicantIncome)
+```
+
+```{r}
+sd(df$LoanAmount)
+```
+
+```{r}
+sd(df$ApplicantIncome)
+```
+
+
+```{r}
+mean(df$Loan_Amount_Term)
+
+```
+
+Bar chart is plotted for the whole dataframe for easy visualization
+```{r}
+plot(df)
+```
+
+
+Histograms are plotted to understand the trend of values in the columns
+```{r}
+hist(df$LoanAmount)
+```
+```{r}
+hist(df$CoapplicantIncome)
+```
+
+
+```{r}
+hist(df$ApplicantIncome)
+```
+```{r}
+hist(df$LoanAmount)
+
+```
+
+Pie chart is plotted to understand the distribution of column data with respect to the data frame
+```{r}
+pie(table(df$ApplicantIncome))
+```
+
+Here the bar plots are plotted against 2 different columns to find trends instead of just using the normal single column values
+
+```{r}
+plot(x=df$ApplicantIncome,y=df$CoapplicantIncome)
+```
+```{r}
+boxplot(df$ApplicantIncome,df$CoapplicantIncome)
+```
+
